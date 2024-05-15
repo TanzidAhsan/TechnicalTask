@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dynamic Textboxes</title>
+<style>
+    body { font-family: Arial, sans-serif; }
+    .textbox { margin-bottom: 10px; display: flex; align-items: center; }
+    .textbox input[type="number"] { margin-right: 10px; }
+</style>
+</head>
+<body>
+    <h1>Dynamic Textboxes</h1>
+    <div>
+        <label for="num_textboxes">No of Textboxes:</label>
+        <input type="number" id="num_textboxes" placeholder="Enter number of textboxes">
+        <button onclick="addTextboxes()">Add Textbox</button>
+    </div>
+    <form id="textbox_form" onsubmit="return handleSubmit();">
+        <div id="textbox_container"></div>
+        <button type="submit">Calculate</button>
+    </form>
+    <div id="output"></div>
+    <script>
+        function addTextboxes() {
+            var container = document.getElementById('textbox_container');
+            var count = document.getElementById('num_textboxes').value;
+            container.innerHTML = '';
+            for (var i = 1; i <= count; i++) {
+                container.innerHTML += '<div class="textbox"><input type="checkbox" name="checkboxes" value="' + i + '"><input type="number" name="numbers[]" placeholder="Number"></div>';
+            }
+        }
+
+        function handleSubmit() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const numbers = document.querySelectorAll('input[type="number"]');
+            let total = 0;
+            let selectedItems = [];
+            checkboxes.forEach(checkbox => {
+                const index = parseInt(checkbox.value) - 1;
+                if (numbers[index] && numbers[index].value) {
+                    total += parseInt(numbers[index].value);
+                    selectedItems.push(index + 1);
+                }
+            });
+            document.getElementById('output').innerHTML = 'Selected ' + selectedItems.length + ' Items, their positions are ' + selectedItems.join(', ') + ' and Total Number is ' + total;
+            return false; // Prevent form submission
+        }
+    </script>
+</body>
+</html>
